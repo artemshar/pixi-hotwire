@@ -1,12 +1,11 @@
-import { Application, Container, Sprite, ColorMatrixFilter } from "pixi.js";
+import { Application, Container, Sprite } from "pixi.js";
 import * as dat from "dat.gui";
 
 // Settings
 const settings = {
-  saturnX: 315,
-  saturnY: 200,
-  saturnWidth: 130,
-  saturnHeight: 130,
+  planetX: 315,
+  planetY: 200,
+  planetSize: 130,
   backgroundColor: 0x0,
 };
 
@@ -15,8 +14,8 @@ const app = new Application({
   resolution: window.devicePixelRatio || 1,
   autoDensity: true,
   backgroundColor: settings.backgroundColor,
-  width: 640,
-  height: 500,
+  width: window.innerWidth,
+  height: window.innerHeight,
 });
 
 // Add Container
@@ -29,15 +28,15 @@ app.stage.addChild(container);
 
 // Add the image
 const saturn: Sprite = Sprite.from("earth.png");
-saturn.x = settings.saturnX;
-saturn.y = settings.saturnY;
-saturn.width = settings.saturnWidth;
-saturn.height = settings.saturnHeight;
+saturn.x = settings.planetX;
+saturn.y = settings.planetY;
+saturn.width = settings.planetSize;
+saturn.height = settings.planetSize;
 
-const filter = new ColorMatrixFilter();
-filter.hue(180, true); // Rotate the hue by 180 degrees
-filter.contrast(2, true); // Increase the contrast
-saturn.filters = [filter];
+// const filter = new ColorMatrixFilter();
+// filter.hue(180, true); // Rotate the hue by 180 degrees
+// filter.contrast(1, true); // Increase the contrast
+// saturn.filters = [filter];
 container.addChild(saturn);
 
 
@@ -55,36 +54,26 @@ gui.addColor(settings, "backgroundColor").onChange((color) => {
 });
 
 // Add X and Y position controls to dat.gui
-gui.add(settings, 'saturnX', -saturn.width, app.renderer.width).onChange(() => {
-  saturn.position.x = settings.saturnX;
+gui.add(settings, 'planetX', -saturn.width, window.innerWidth).onChange(() => {
+  saturn.position.x = settings.planetX;
 });
 
-gui.add(settings, 'saturnY', -saturn.height, app.renderer.height).onChange(() => {
-  saturn.position.y = settings.saturnY;
+gui.add(settings, 'planetY', -saturn.height, window.innerHeight).onChange(() => {
+  saturn.position.y = settings.planetY;
 });
 
-gui.add(settings, 'saturnWidth', 0, 400).onChange(() => {
-  saturn.width = settings.saturnWidth;
+gui.add(settings, 'planetSize', 10, 600).onChange(() => {
+  saturn.width = settings.planetSize;
+  saturn.height = settings.planetSize;
 });
 
-gui.add(settings, 'saturnHeight', 0, 400).onChange(() => {
-  saturn.height = settings.saturnHeight;
-});
 
 // Update loop
 app.ticker.add(() => {
   // Update the position of the sprite
-  saturn.position.x = settings.saturnX;
-  saturn.position.y = settings.saturnY;
+  saturn.position.x = settings.planetX;
+  saturn.position.y = settings.planetY;
 
-  saturn.width = settings.saturnWidth;
-  saturn.height = settings.saturnHeight;
+  saturn.width = settings.planetSize;
+  saturn.height = settings.planetSize;
 });
-
-
-// clampy.anchor.set(0.5);
-
-// clampy.x = app.screen.width / 2;
-// clampy.y = app.screen.height / 2;
-
-// app.stage.addChild(clampy);
